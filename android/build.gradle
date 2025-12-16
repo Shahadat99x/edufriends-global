@@ -1,0 +1,29 @@
+// android/build.gradle - Root build file
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = '../build'
+
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+// Suppress Java 8 obsolete warnings from third-party plugins
+subprojects {
+    tasks.withType(JavaCompile).configureEach {
+        options.compilerArgs << "-Xlint:-options"
+    }
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
